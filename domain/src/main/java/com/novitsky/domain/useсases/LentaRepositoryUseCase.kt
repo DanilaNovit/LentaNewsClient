@@ -12,7 +12,7 @@ interface LentaRepositoryUseCase {
     }
 
     interface CallbackCatalog {
-        fun onResponse(catalog: MutableList<MutableList<NewsModel>>)
+        fun onResponse(catalog: MutableMap<String, MutableList<NewsModel>>)
         fun onFailure(errorMessage: String)
     }
 }

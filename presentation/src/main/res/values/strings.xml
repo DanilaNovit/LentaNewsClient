@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">LentaNewsClient</string>
+
+    <string name="russia">Россия</string>
+    <string name="world">Мир</string>
+    <string name="ussr">Бывший СССР</string>
+    <string name="economics">Экономика</string>
+    <string name="science">Наука и техника</string>
+    <string name="culture">Культура</string>
+    <string name="sport">Спорт</string>
+    <string name="media">Интернет и СМИ</string>
+    <string name="style">Ценности</string>
+    <string name="travel">Путешествия</string>
+    <string name="life">Из жизни</string>
+    <string name="realty">Дом</string>
 </resources>

@@ -1,12 +1,12 @@
 package com.novitsky.domain.useсases
 
 import com.novitsky.domain.model.NewsModel
-import com.novitsky.domain.repository.LentaRepository
+import com.novitsky.domain.repository.LentaNetworkRepository
 
-class LentaRepositoryUseCaseImpl(private val repository: LentaRepository): LentaRepositoryUseCase {
+class LentaRepositoryUseCaseImpl(private val repository: LentaNetworkRepository): LentaRepositoryUseCase {
 
     override fun getCategory(category: String, callback: LentaRepositoryUseCase.CallbackCategory) {
-        repository.getNews(category, object: LentaRepository.Callback {
+        repository.getNews(category, object: LentaNetworkRepository.Callback {
             override fun onResponse(response: MutableList<NewsModel>, responseCode: Int) {
                 when (responseCode) {
                     200  -> callback.onResponse(response)
@@ -20,15 +20,15 @@ class LentaRepositoryUseCaseImpl(private val repository: LentaRepository): Lenta
     override fun getCatalog(numberOfNewsInCategory: Int,
                             callback: LentaRepositoryUseCase.CallbackCatalog) {
         var uploadedCategories = 0
-        val resultList = mutableListOf<MutableList<NewsModel>>()
+        val resultList = mutableMapOf<String, MutableList<NewsModel>>()
 
-        val categories = LentaRepository.NewsCategory.values()
+        val categories = LentaNetworkRepository.NewsCategory.values()
         categories.forEach {
-            repository.getNews(it.value, object: LentaRepository.Callback {
+            repository.getNews(it.value, object: LentaNetworkRepository.Callback {
                 override fun onResponse(response: MutableList<NewsModel>, responseCode: Int) {
                     if (responseCode == 200) {
                         ++uploadedCategories
-                        resultList.add(response)
+                        resultList[it.value] = response
 
                         if (uploadedCategories == categories.size) {
                             callback.onResponse(resultList)
