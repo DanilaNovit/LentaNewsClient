@@ -10,6 +10,7 @@ import com.novitsky.domain.useсases.LentaRepositoryUseCase
 import com.novitsky.domain.useсases.LentaRepositoryUseCaseImpl
 import com.novitsky.lentanewsclient.adapters.CategoryListAdapter
 import com.novitsky.lentanewsclient.fragments.CategoryListFragment
+import com.novitsky.lentanewsclient.fragments.NewsDetailFragment
 
 class MainActivity : AppCompatActivity() {
     @SuppressLint("CommitTransaction")
@@ -17,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val fragment = CategoryListFragment()
+        val fragment = NewsDetailFragment()
 
         val ft = supportFragmentManager.beginTransaction()
 
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         useCase.getCategory(LentaNetworkRepository.NewsCategory.CULTURE.value,
                 object: LentaRepositoryUseCase.CallbackCategory {
                     override fun onResponse(category: MutableList<NewsModel>) {
-                        fragment.setAdapter(CategoryListAdapter(category))
+                        fragment.setURL(category[0].guid)
                         ft.add(R.id.test_fragment, fragment)
                         ft.commit()
                     }
