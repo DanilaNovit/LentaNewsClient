@@ -13,4 +13,6 @@
     <string name="travel">Путешествия</string>
     <string name="life">Из жизни</string>
     <string name="realty">Дом</string>
+    <string name="view">View</string>
+    <string name="news_image">News image</string>
 </resources>
