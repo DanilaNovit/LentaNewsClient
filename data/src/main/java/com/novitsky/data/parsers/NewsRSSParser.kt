@@ -13,7 +13,8 @@ class NewsRSSParser {
         xpp = factory.newPullParser()
     }
 
-    fun parse(inputString: String?, resultLength: Int = Int.MAX_VALUE): MutableList<NewsModel> {
+    fun parse(inputString: String?, container: MutableList<NewsModel>,
+              resultLength: Int = Int.MAX_VALUE): MutableList<NewsModel> {
         if (inputString == null) {
             return mutableListOf()
         }
@@ -22,7 +23,10 @@ class NewsRSSParser {
 
         xpp.next()
         var itemCount = 0
-        val resultList = mutableListOf<NewsModel>()
+
+        var tmpGuid = ""
+        var tmpTitle = ""
+        var tmpDescription = ""
 
         while (xpp.eventType != XmlPullParser.END_DOCUMENT
                 && itemCount <= resultLength) {
@@ -32,8 +36,6 @@ class NewsRSSParser {
                 if (itemCount > resultLength) {
                     continue
                 }
-
-                resultList.add(NewsModel())
             }
 
             if (itemCount == 0) {
@@ -46,17 +48,26 @@ class NewsRSSParser {
                 xpp.next()
 
                 when (tagName) {
-                    "guid" -> resultList[itemCount - 1].guid = xpp.text
-                    "author" -> resultList[itemCount - 1].author = xpp.text
-                    "title" -> resultList[itemCount - 1].title = xpp.text
-                    "description" -> resultList[itemCount - 1].description = xpp.text
-                    "enclosure" -> resultList[itemCount - 1].imageURL =  xpp.getAttributeValue(0)
+                    "guid" -> tmpGuid = xpp.text
+                    "title" -> tmpTitle = xpp.text
+                    "description" -> tmpDescription = xpp.text
+                    "enclosure" -> {
+                        if (itemCount < container.size) {
+                            container[itemCount - 1].guid = tmpGuid
+                            container[itemCount - 1].title = tmpTitle
+                            container[itemCount - 1].description = tmpDescription
+                            container[itemCount - 1].imageURL = xpp.getAttributeValue(0)
+                        } else {
+                            container.add(NewsModel(tmpGuid, tmpTitle,
+                                tmpDescription, xpp.getAttributeValue(0)))
+                        }
+                    }
                 }
             }
 
             xpp.next()
         }
 
-        return resultList
+        return container
     }
 }

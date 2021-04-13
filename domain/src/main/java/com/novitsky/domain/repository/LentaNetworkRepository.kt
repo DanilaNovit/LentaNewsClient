@@ -3,7 +3,8 @@ package com.novitsky.domain.repository
 import com.novitsky.domain.model.NewsModel
 
 interface LentaNetworkRepository {
-    fun getNews(category: String, callback: Callback, numberOfNews: Int? = null)
+    fun getNews(category: NewsCategory, callback: Callback,
+                container: MutableList<NewsModel>, numberOfNews: Int? = null)
 
     interface Callback {
         fun onResponse(response: MutableList<NewsModel>, responseCode: Int)

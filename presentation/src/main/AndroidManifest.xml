@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LentaNewsClient">
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

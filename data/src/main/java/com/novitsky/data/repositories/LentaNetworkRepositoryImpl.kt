@@ -1,6 +1,7 @@
 package com.novitsky.data.repositories
 
 import com.novitsky.data.parsers.NewsRSSParser
+import com.novitsky.domain.model.NewsModel
 import com.novitsky.domain.repository.LentaNetworkRepository
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,8 +21,10 @@ class LentaNetworkRepositoryImpl : LentaNetworkRepository {
         service = retrofit.create(LentaService::class.java)
     }
 
-    override fun getNews(category: String, callback: LentaNetworkRepository.Callback, numberOfNews: Int?) {
-        service.getNewsRSS(category).enqueue(object : Callback<String> {
+    override fun getNews(category: LentaNetworkRepository.NewsCategory,
+                         callback: LentaNetworkRepository.Callback,
+                         container: MutableList<NewsModel>, numberOfNews: Int?) {
+        service.getNewsRSS(category.value).enqueue(object : Callback<String> {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 callback.onResponse(mutableListOf(), -1)
             }
@@ -29,9 +32,9 @@ class LentaNetworkRepositoryImpl : LentaNetworkRepository {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful) {
                     val parseResponse = if (numberOfNews != null) {
-                        NewsRSSParser().parse(response.body(), numberOfNews)
+                        NewsRSSParser().parse(response.body(), container, numberOfNews)
                     } else {
-                        NewsRSSParser().parse(response.body())
+                        NewsRSSParser().parse(response.body(), container)
                     }
 
                     callback.onResponse(parseResponse, response.code())

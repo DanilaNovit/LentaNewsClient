@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.novitsky.domain.model.NewsModel
 import com.novitsky.lentanewsclient.R
 import com.novitsky.lentanewsclient.adapters.CategoryListAdapter
+import com.novitsky.lentanewsclient.viewholders.CategoryViewHolder
 
 class CategoryListFragment: Fragment() {
     private var recyclerView: RecyclerView? = null
-    private var adapter: RecyclerView.Adapter<CategoryListAdapter.ViewHolder>? = null
+    private var adapter: CategoryListAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +28,12 @@ class CategoryListFragment: Fragment() {
         return view
     }
 
-    fun setAdapter(adapter: RecyclerView.Adapter<CategoryListAdapter.ViewHolder>) {
-        this.adapter = adapter
+    fun updateAdapter(newsList: MutableList<NewsModel>,
+                      listener: CategoryViewHolder.OnCategoryClickListener) {
+        if (adapter == null) {
+            adapter = CategoryListAdapter(newsList, listener)
+        } else {
+            adapter?.updateData(newsList)
+        }
     }
 }
