@@ -2,14 +2,14 @@ package com.novitsky.lentanewsclient.adapters
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.novitsky.domain.model.NewsModel
+import com.novitsky.domain.model.News
 import com.novitsky.domain.repository.LentaNetworkRepository
 import com.novitsky.lentanewsclient.viewholders.CatalogViewHolderBinder
 import com.novitsky.lentanewsclient.viewholders.CatalogViewHolderFactory
 
 class CatalogListAdapter(
-    private var catalogMap: MutableMap<LentaNetworkRepository.NewsCategory, MutableList<NewsModel>>,
-    private val listener: CatalogViewHolderFactory.OnItemCatalogClickListener
+        private var catalogMap: MutableMap<LentaNetworkRepository.NewsCategory, MutableList<News>>,
+        private val listener: CatalogViewHolderFactory.OnItemCatalogClickListener
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var catalogMapKeys = LentaNetworkRepository.NewsCategory.values()
 
@@ -45,7 +45,7 @@ class CatalogListAdapter(
     }
 
     fun updateData(catalogMap: MutableMap<LentaNetworkRepository.NewsCategory,
-                MutableList<NewsModel>>) {
+                MutableList<News>>) {
         this.catalogMap = catalogMap
         notifyDataSetChanged()
     }

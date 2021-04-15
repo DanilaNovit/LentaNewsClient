@@ -1,7 +1,7 @@
 package com.novitsky.data.repositories
 
 import com.novitsky.data.parsers.NewsRSSParser
-import com.novitsky.domain.model.NewsModel
+import com.novitsky.domain.model.News
 import com.novitsky.domain.repository.LentaNetworkRepository
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,7 +23,7 @@ class LentaNetworkRepositoryImpl : LentaNetworkRepository {
 
     override fun getNews(category: LentaNetworkRepository.NewsCategory,
                          callback: LentaNetworkRepository.Callback,
-                         container: MutableList<NewsModel>, numberOfNews: Int?) {
+                         container: MutableList<News>, numberOfNews: Int?) {
         service.getNewsRSS(category.value).enqueue(object : Callback<String> {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 callback.onResponse(mutableListOf(), -1)

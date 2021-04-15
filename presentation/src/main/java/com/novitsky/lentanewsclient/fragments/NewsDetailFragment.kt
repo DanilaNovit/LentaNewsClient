@@ -1,6 +1,7 @@
 package com.novitsky.lentanewsclient.fragments
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,37 +10,43 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.novitsky.lentanewsclient.R
+import com.novitsky.lentanewsclient.contracts.NewsDetailContract
+import com.novitsky.lentanewsclient.presenters.NewsDetailPresenter
 
-class NewsDetailFragment : Fragment() {
-    private var webView: WebView? = null
-    private var url: String? = null
+class NewsDetailFragment : Fragment, NewsDetailContract.View {
+    private lateinit var webView: WebView
+    private lateinit var presenter: NewsDetailContract.Presenter
 
-    @SuppressLint("SetJavaScriptEnabled")
+    constructor(): super()
+
+    constructor(presenter: NewsDetailContract.Presenter) {
+        this.presenter = presenter
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_news_detail, container, false)
-
         webView = view.findViewById(R.id.news_detail_web_view)
-
-        if (webView != null) {
-            webView!!.settings.javaScriptEnabled = true
-            webView!!.loadUrl(url.toString())
-            webView!!.webViewClient = object : WebViewClient() {
-                override fun shouldOverrideUrlLoading(
-                    view: WebView?,
-                    url: String?
-                ): Boolean {
-                    return false
-                }
-            }
-        }
-
         return view
     }
 
-    fun setURL(url: String?) {
-        this.url = url
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.onViewCreated()
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    override fun javaScriptEnabled(enabled: Boolean) {
+        webView.settings.javaScriptEnabled = enabled
+    }
+
+    override fun setWebViewClient(client: WebViewClient) {
+        webView.webViewClient = client
+    }
+
+    override fun loadURL(url: String) {
+        webView.loadUrl(url)
     }
 }

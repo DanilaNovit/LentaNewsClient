@@ -1,13 +1,13 @@
 package com.novitsky.domain.repository
 
-import com.novitsky.domain.model.NewsModel
+import com.novitsky.domain.model.News
 
 interface LentaNetworkRepository {
     fun getNews(category: NewsCategory, callback: Callback,
-                container: MutableList<NewsModel>, numberOfNews: Int? = null)
+                container: MutableList<News>, numberOfNews: Int? = null)
 
     interface Callback {
-        fun onResponse(response: MutableList<NewsModel>, responseCode: Int)
+        fun onResponse(response: MutableList<News>, responseCode: Int)
     }
 
     enum class NewsCategory(val value: String) {

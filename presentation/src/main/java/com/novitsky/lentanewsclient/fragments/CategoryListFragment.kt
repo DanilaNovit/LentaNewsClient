@@ -5,16 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.novitsky.domain.model.NewsModel
+import com.novitsky.domain.repository.LentaNetworkRepository
+import com.novitsky.domain.useсases.LentaRepositoryUseCase
 import com.novitsky.lentanewsclient.R
 import com.novitsky.lentanewsclient.adapters.CategoryListAdapter
-import com.novitsky.lentanewsclient.viewholders.CategoryViewHolder
+import com.novitsky.lentanewsclient.contracts.CategoryListContract
+import com.novitsky.lentanewsclient.navigation.Router
+import com.novitsky.lentanewsclient.presenters.CategoryListPresenter
 
-class CategoryListFragment: Fragment() {
-    private var recyclerView: RecyclerView? = null
-    private var adapter: CategoryListAdapter? = null
+class CategoryListFragment: Fragment, CategoryListContract.View {
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var presenter: CategoryListContract.Presenter
+
+    constructor(): super()
+
+    constructor(presenter: CategoryListContract.Presenter) {
+        this.presenter = presenter
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,18 +30,19 @@ class CategoryListFragment: Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_category_list, container, false)
         recyclerView = view.findViewById(R.id.category_list)
-        recyclerView?.layoutManager = LinearLayoutManager(view.context)
-        recyclerView?.adapter = adapter
-
         return view
     }
 
-    fun updateAdapter(newsList: MutableList<NewsModel>,
-                      listener: CategoryViewHolder.OnCategoryClickListener) {
-        if (adapter == null) {
-            adapter = CategoryListAdapter(newsList, listener)
-        } else {
-            adapter?.updateData(newsList)
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.onViewCreated()
+    }
+
+    override fun setAdapter(adapter: CategoryListAdapter) {
+        recyclerView.adapter = adapter
+    }
+
+    override fun setLayoutManager(layoutManager: RecyclerView.LayoutManager) {
+        recyclerView.layoutManager = layoutManager
     }
 }

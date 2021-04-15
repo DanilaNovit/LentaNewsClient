@@ -1,15 +1,13 @@
 package com.novitsky.domain.useсases
 
-import com.novitsky.domain.model.NewsModel
+import com.novitsky.domain.model.News
 import com.novitsky.domain.repository.LentaNetworkRepository
 
 class LentaRepositoryUseCaseImpl(private val repository: LentaNetworkRepository): LentaRepositoryUseCase {
-    private val newsContainer = mutableListOf<NewsModel>()
-
     override fun getCategory(category: LentaNetworkRepository.NewsCategory,
                              callback: LentaRepositoryUseCase.CallbackCategory) {
         repository.getNews(category, object: LentaNetworkRepository.Callback {
-            override fun onResponse(response: MutableList<NewsModel>, responseCode: Int) {
+            override fun onResponse(response: MutableList<News>, responseCode: Int) {
                 when (responseCode) {
                     200  -> callback.onResponse(response, category)
                     -1   -> callback.onFailure("No network connection")
@@ -22,19 +20,26 @@ class LentaRepositoryUseCaseImpl(private val repository: LentaNetworkRepository)
     override fun getCatalog(numberOfNewsInCategory: Int,
                             callback: LentaRepositoryUseCase.CallbackCatalog) {
         var uploadedCategories = 0
-        val resultList = mutableMapOf<LentaNetworkRepository.NewsCategory,
-                MutableList<NewsModel>>()
+        val resultMap = mutableMapOf<LentaNetworkRepository.NewsCategory,
+                MutableList<News>>()
+
+        var containerIterateIndex = 0
 
         val categories = LentaNetworkRepository.NewsCategory.values()
         categories.forEach {
+            val categoryList = getCategoryInCatalogList(containerIterateIndex,
+                    numberOfNewsInCategory)
+            containerIterateIndex += numberOfNewsInCategory
+
             repository.getNews(it, object: LentaNetworkRepository.Callback {
-                override fun onResponse(response: MutableList<NewsModel>, responseCode: Int) {
+                override fun onResponse(response: MutableList<News>, responseCode: Int) {
                     if (responseCode == 200) {
                         ++uploadedCategories
-                        resultList[it] = response
+                        resultMap[it] = response
+                        saveNewsList(response)
 
                         if (uploadedCategories == categories.size) {
-                            callback.onResponse(resultList)
+                            callback.onResponse(resultMap)
                         }
                     } else {
                         when (responseCode) {
@@ -43,7 +48,32 @@ class LentaRepositoryUseCaseImpl(private val repository: LentaNetworkRepository)
                         }
                     }
                 }
-            }, newsContainer, numberOfNewsInCategory)
+            }, categoryList, numberOfNewsInCategory)
         }
+    }
+
+    private fun getCategoryInCatalogList(containerIterateIndex: Int,
+                                         numberOfNewsInCategory: Int): MutableList<News> {
+        val categoryList = mutableListOf<News>()
+
+        for (i in containerIterateIndex..containerIterateIndex + numberOfNewsInCategory) {
+            if(newsContainer.size > i) {
+                categoryList.add(newsContainer[i])
+            }
+        }
+
+        return categoryList
+    }
+
+    private fun saveNewsList(newsList: MutableList<News>) {
+        for (i in newsList) {
+            if (!newsContainer.contains(i)) {
+                newsContainer.add(i)
+            }
+        }
+    }
+
+    companion object {
+        private val newsContainer = mutableListOf<News>()
     }
 }

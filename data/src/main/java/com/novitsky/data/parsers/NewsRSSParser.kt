@@ -1,6 +1,6 @@
 package com.novitsky.data.parsers
 
-import com.novitsky.domain.model.NewsModel
+import com.novitsky.domain.model.News
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.StringReader
@@ -13,8 +13,8 @@ class NewsRSSParser {
         xpp = factory.newPullParser()
     }
 
-    fun parse(inputString: String?, container: MutableList<NewsModel>,
-              resultLength: Int = Int.MAX_VALUE): MutableList<NewsModel> {
+    fun parse(inputString: String?, container: MutableList<News>,
+              resultLength: Int = Int.MAX_VALUE): MutableList<News> {
         if (inputString == null) {
             return mutableListOf()
         }
@@ -58,7 +58,7 @@ class NewsRSSParser {
                             container[itemCount - 1].description = tmpDescription
                             container[itemCount - 1].imageURL = xpp.getAttributeValue(0)
                         } else {
-                            container.add(NewsModel(tmpGuid, tmpTitle,
+                            container.add(News(tmpGuid, tmpTitle,
                                 tmpDescription, xpp.getAttributeValue(0)))
                         }
                     }

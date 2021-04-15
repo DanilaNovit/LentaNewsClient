@@ -1,6 +1,6 @@
 package com.novitsky.lentanewsclient.viewholders
 
-import com.novitsky.domain.model.NewsModel
+import com.novitsky.domain.model.News
 import com.novitsky.domain.repository.LentaNetworkRepository
 
 class CatalogViewHolderBinder {
@@ -17,7 +17,7 @@ class CatalogViewHolderBinder {
         }
     }
 
-    fun bind(viewHolder: CatalogViewHolderFactory.CatalogNewsViewHolder, news: NewsModel) {
+    fun bind(viewHolder: CatalogViewHolderFactory.CatalogNewsViewHolder, news: News) {
         viewHolder.url = news.guid
         viewHolder.imageNews.uploadImage(news.imageURL)
         viewHolder.titleNews.text = news.title

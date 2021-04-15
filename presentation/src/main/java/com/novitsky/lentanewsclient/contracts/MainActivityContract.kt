@@ -1,12 +1,13 @@
-package com.novitsky.lentanewsclient.view
+package com.novitsky.lentanewsclient.contracts
 
 import android.content.Context
 
-interface MainContract {
+interface MainActivityContract {
     interface View {
         fun setVisibleBackButton(isVisible: Boolean)
         fun setTitle(title: String)
         fun getContext(): Context
+        fun finish()
     }
 
     interface Presenter {

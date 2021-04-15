@@ -1,6 +1,6 @@
 package com.novitsky.domain.model
 
-data class NewsModel(
+data class News(
     var guid: String,
     var title: String,
     var description: String,

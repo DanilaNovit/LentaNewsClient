@@ -3,14 +3,14 @@ package com.novitsky.lentanewsclient.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.novitsky.domain.model.NewsModel
+import com.novitsky.domain.model.News
 import com.novitsky.lentanewsclient.R
 import com.novitsky.lentanewsclient.viewholders.CategoryViewHolder
 import com.novitsky.lentanewsclient.viewholders.CategoryViewHolderBinder
 
 class CategoryListAdapter(
-    private var newsList: MutableList<NewsModel>,
-    private val listener: CategoryViewHolder.OnCategoryClickListener
+        private var newsList: MutableList<News>,
+        private val listener: CategoryViewHolder.OnCategoryClickListener
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, position: Int): RecyclerView.ViewHolder {
@@ -28,7 +28,7 @@ class CategoryListAdapter(
         return newsList.size
     }
 
-    fun updateData(newsList: MutableList<NewsModel>) {
+    fun updateData(newsList: MutableList<News>) {
         this.newsList = newsList
         notifyDataSetChanged()
     }

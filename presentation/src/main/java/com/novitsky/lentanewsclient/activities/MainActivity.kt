@@ -1,20 +1,18 @@
-package com.novitsky.lentanewsclient.view
+package com.novitsky.lentanewsclient.activities
 
 import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.novitsky.data.repositories.LentaNetworkRepositoryImpl
-import com.novitsky.domain.useсases.LentaRepositoryUseCaseImpl
 import com.novitsky.lentanewsclient.R
+import com.novitsky.lentanewsclient.contracts.MainActivityContract
 import com.novitsky.lentanewsclient.navigation.RouterImpl
+import com.novitsky.lentanewsclient.presenters.MainActivityPresenter
 import java.lang.ref.WeakReference
 
-class MainActivity : AppCompatActivity(), MainContract.View {
-    private val presenter: MainContract.Presenter =
-                    MainPresenter(WeakReference(this),
-                        RouterImpl(supportFragmentManager, R.id.fragment_container),
-                    LentaRepositoryUseCaseImpl(LentaNetworkRepositoryImpl()))
+class MainActivity : AppCompatActivity(), MainActivityContract.View {
+    private val presenter: MainActivityContract.Presenter =
+            MainActivityPresenter(this, RouterImpl(supportFragmentManager, R.id.fragment_container))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +27,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        presenter.onClickBackButton()
     }
 
     override fun setVisibleBackButton(isVisible: Boolean) {

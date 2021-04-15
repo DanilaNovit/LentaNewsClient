@@ -1,9 +1,9 @@
 package com.novitsky.lentanewsclient.viewholders
 
-import com.novitsky.domain.model.NewsModel
+import com.novitsky.domain.model.News
 
 class CategoryViewHolderBinder {
-    fun bind(viewHolder: CategoryViewHolder, news: NewsModel,
+    fun bind(viewHolder: CategoryViewHolder, news: News,
              listener: CategoryViewHolder.OnCategoryClickListener) {
         viewHolder.urlNews = news.guid
         viewHolder.titleView.text = news.title
