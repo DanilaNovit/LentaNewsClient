@@ -29,6 +29,7 @@ class CatalogListPresenter (
 
     override fun onViewCreated() {
         setConfig()
+        view.get()?.visibilityProgressBar(true)
 
         useCase.getCatalog(NUMBER_OF_NEWS_IN_CATEGORY_IN_CATALOG, catalogCallback)
 
@@ -47,6 +48,7 @@ class CatalogListPresenter (
 
     private val catalogCallback = object: LentaRepositoryUseCase.CallbackCatalog {
         override fun onResponse(catalog: MutableMap<LentaNetworkRepository.NewsCategory, MutableList<News>>) {
+            view.get()?.visibilityProgressBar(false)
             view.get()?.setAdapter(CatalogListAdapter(catalog, catalogListener))
         }
 

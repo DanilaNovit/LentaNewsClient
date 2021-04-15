@@ -2,6 +2,7 @@ package com.novitsky.lentanewsclient.presenters
 
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ProgressBar
 import com.novitsky.lentanewsclient.activities.ActivityConfigurationModel
 import com.novitsky.lentanewsclient.contracts.NewsDetailContract
 import com.novitsky.lentanewsclient.navigation.Router

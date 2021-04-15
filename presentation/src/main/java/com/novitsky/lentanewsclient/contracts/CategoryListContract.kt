@@ -8,6 +8,7 @@ interface CategoryListContract {
     interface View {
         fun setAdapter(adapter: CategoryListAdapter)
         fun setLayoutManager(layoutManager: RecyclerView.LayoutManager)
+        fun visibilityProgressBar(visibility: Boolean)
         fun getContext(): Context?
     }
 

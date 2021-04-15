@@ -8,6 +8,7 @@ interface CatalogListContract {
     interface View {
         fun setAdapter(adapter: CatalogListAdapter)
         fun setLayoutManager(layoutManager: RecyclerView.LayoutManager)
+        fun visibilityProgressBar(visibility: Boolean)
         fun getContext(): Context?
     }
 

@@ -28,6 +28,8 @@ class CategoryListPresenter(
 
     override fun onViewCreated() {
         setConfig()
+        view.get()?.visibilityProgressBar(true)
+
         useCase.getCategory(category, categoryCallback)
         view.get()?.setLayoutManager(LinearLayoutManager(view.get()?.getContext()))
     }
@@ -41,6 +43,7 @@ class CategoryListPresenter(
     private val categoryCallback = object: LentaRepositoryUseCase.CallbackCategory {
         override fun onResponse(news: MutableList<News>,
                                 category: LentaNetworkRepository.NewsCategory) {
+                view.get()?.visibilityProgressBar(false)
                 view.get()?.setAdapter(CategoryListAdapter(news, categoryListener))
             }
 

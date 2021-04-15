@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.novitsky.domain.repository.LentaNetworkRepository
@@ -16,6 +17,7 @@ import com.novitsky.lentanewsclient.presenters.CategoryListPresenter
 
 class CategoryListFragment: Fragment, CategoryListContract.View {
     private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
     private lateinit var presenter: CategoryListContract.Presenter
 
     constructor(): super()
@@ -29,7 +31,10 @@ class CategoryListFragment: Fragment, CategoryListContract.View {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_category_list, container, false)
+
         recyclerView = view.findViewById(R.id.category_list)
+        progressBar  = view.findViewById(R.id.category_progress_bar)
+
         return view
     }
 
@@ -44,5 +49,13 @@ class CategoryListFragment: Fragment, CategoryListContract.View {
 
     override fun setLayoutManager(layoutManager: RecyclerView.LayoutManager) {
         recyclerView.layoutManager = layoutManager
+    }
+
+    override fun visibilityProgressBar(visibility: Boolean) {
+        if (visibility) {
+            progressBar.visibility = ProgressBar.VISIBLE
+        } else {
+            progressBar.visibility = ProgressBar.INVISIBLE
+        }
     }
 }

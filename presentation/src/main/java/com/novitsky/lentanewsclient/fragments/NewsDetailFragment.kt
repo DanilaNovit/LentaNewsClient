@@ -1,7 +1,6 @@
 package com.novitsky.lentanewsclient.fragments
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,7 +10,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.novitsky.lentanewsclient.R
 import com.novitsky.lentanewsclient.contracts.NewsDetailContract
-import com.novitsky.lentanewsclient.presenters.NewsDetailPresenter
 
 class NewsDetailFragment : Fragment, NewsDetailContract.View {
     private lateinit var webView: WebView
