@@ -10,5 +10,4 @@ interface LentaNetworkRepository {
     interface Callback {
         fun onResponse(response: MutableMap<NewsCategory, MutableList<News>>, responseCode: Int)
     }
-
 }

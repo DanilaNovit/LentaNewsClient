@@ -5,7 +5,6 @@ import com.novitsky.domain.model.NewsCategory
 import com.novitsky.domain.repository.LentaNetworkRepository
 
 interface LentaRepositoryUseCase {
-//    fun getCategory(category: NewsCategory, callback: CallbackCategory)
     fun getCatalog(callback: CallbackCatalog)
 
     fun getRussianCategory(callback: CallbackCategory)

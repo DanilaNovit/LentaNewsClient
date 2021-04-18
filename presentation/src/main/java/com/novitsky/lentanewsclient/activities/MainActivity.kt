@@ -9,7 +9,6 @@ import com.novitsky.lentanewsclient.R
 import com.novitsky.lentanewsclient.contracts.MainActivityContract
 import com.novitsky.lentanewsclient.navigation.RouterImpl
 import com.novitsky.lentanewsclient.presenters.MainActivityPresenter
-import java.lang.ref.WeakReference
 
 class MainActivity : AppCompatActivity(), MainActivityContract.View,
         FragmentManager.OnBackStackChangedListener {
