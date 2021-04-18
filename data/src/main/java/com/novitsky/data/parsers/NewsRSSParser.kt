@@ -27,6 +27,7 @@ class NewsRSSParser {
         var tmpGuid = ""
         var tmpTitle = ""
         var tmpDescription = ""
+        var tmpImageURL = ""
 
         while (xpp.eventType != XmlPullParser.END_DOCUMENT
                 && itemCount <= resultLength) {
@@ -51,15 +52,17 @@ class NewsRSSParser {
                     "guid" -> tmpGuid = xpp.text
                     "title" -> tmpTitle = xpp.text
                     "description" -> tmpDescription = xpp.text
-                    "enclosure" -> {
+                    "enclosure" -> tmpImageURL = xpp.getAttributeValue(0)
+                    "category" -> {
                         if (itemCount < container.size) {
                             container[itemCount - 1].guid = tmpGuid
                             container[itemCount - 1].title = tmpTitle
                             container[itemCount - 1].description = tmpDescription
-                            container[itemCount - 1].imageURL = xpp.getAttributeValue(0)
+                            container[itemCount - 1].imageURL = tmpImageURL
+                            container[itemCount - 1].category = xpp.text
                         } else {
                             container.add(News(tmpGuid, tmpTitle,
-                                tmpDescription, xpp.getAttributeValue(0)))
+                                    tmpDescription, tmpImageURL, xpp.text))
                         }
                     }
                 }

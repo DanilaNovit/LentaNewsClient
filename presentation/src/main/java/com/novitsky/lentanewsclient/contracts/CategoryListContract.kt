@@ -1,18 +1,15 @@
 package com.novitsky.lentanewsclient.contracts
 
-import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
-import com.novitsky.lentanewsclient.adapters.CategoryListAdapter
+import com.novitsky.domain.model.News
 
 interface CategoryListContract {
     interface View {
-        fun setAdapter(adapter: CategoryListAdapter)
-        fun setLayoutManager(layoutManager: RecyclerView.LayoutManager)
-        fun visibilityProgressBar(visibility: Boolean)
-        fun getContext(): Context?
+        fun updateData(newsList: MutableList<News>?)
+        fun showError(message: String)
     }
 
     interface Presenter {
         fun onViewCreated()
+        fun onClickItemNews(item: News)
     }
 }

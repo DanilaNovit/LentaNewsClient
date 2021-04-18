@@ -1,13 +1,10 @@
 package com.novitsky.lentanewsclient.navigation
 
-import com.novitsky.domain.repository.LentaNetworkRepository
-import com.novitsky.lentanewsclient.activities.ActivityConfigurationModel
+import com.novitsky.domain.model.NewsCategory
 
 interface Router {
     fun showCatalog()
-    fun showCategory(category: LentaNetworkRepository.NewsCategory)
+    fun showCategory(category: NewsCategory)
     fun showDetail(url: String)
     fun back()
-    fun setConfigHandler(configHandler: ConfigHandler)
-    fun configure(config: ActivityConfigurationModel)
 }

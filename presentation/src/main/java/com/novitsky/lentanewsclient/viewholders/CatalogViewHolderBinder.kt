@@ -1,16 +1,14 @@
 package com.novitsky.lentanewsclient.viewholders
 
 import com.novitsky.domain.model.News
-import com.novitsky.domain.repository.LentaNetworkRepository
+import com.novitsky.domain.model.NewsCategory
 
 class CatalogViewHolderBinder {
     fun bind(viewHolder: CatalogViewHolderFactory.CatalogHeaderViewHolder,
-             category: LentaNetworkRepository.NewsCategory) {
+             category: NewsCategory, title: String) {
         viewHolder.category = category
 
-        val context = viewHolder.itemView.context
-        viewHolder.categoryTitle.text = context.resources.getString(
-            context.resources.getIdentifier(category.value, "string", context.packageName))
+        viewHolder.categoryTitle.text = title
 
         viewHolder.viewButton.setOnClickListener {
             viewHolder.listener.onClickCategory(viewHolder.category)
@@ -18,12 +16,12 @@ class CatalogViewHolderBinder {
     }
 
     fun bind(viewHolder: CatalogViewHolderFactory.CatalogNewsViewHolder, news: News) {
-        viewHolder.url = news.guid
+        viewHolder.news = news
         viewHolder.imageNews.uploadImage(news.imageURL)
         viewHolder.titleNews.text = news.title
 
         viewHolder.newsLayout.setOnClickListener {
-            viewHolder.listener.onClickNews(viewHolder.url)
+            viewHolder.listener.onClickNews(viewHolder.news)
         }
     }
 }

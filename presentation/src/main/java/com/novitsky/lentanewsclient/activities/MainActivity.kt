@@ -4,19 +4,23 @@ import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import com.novitsky.lentanewsclient.R
 import com.novitsky.lentanewsclient.contracts.MainActivityContract
 import com.novitsky.lentanewsclient.navigation.RouterImpl
 import com.novitsky.lentanewsclient.presenters.MainActivityPresenter
 import java.lang.ref.WeakReference
 
-class MainActivity : AppCompatActivity(), MainActivityContract.View {
+class MainActivity : AppCompatActivity(), MainActivityContract.View,
+        FragmentManager.OnBackStackChangedListener {
     private val presenter: MainActivityContract.Presenter =
             MainActivityPresenter(this, RouterImpl(supportFragmentManager, R.id.fragment_container))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        supportFragmentManager.addOnBackStackChangedListener(this)
 
         presenter.onCreateActivity()
     }
@@ -43,5 +47,9 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
     override fun getContext(): Context {
         return this
+    }
+
+    override fun onBackStackChanged() {
+        presenter.onBackStackChanged(supportFragmentManager.backStackEntryCount)
     }
 }

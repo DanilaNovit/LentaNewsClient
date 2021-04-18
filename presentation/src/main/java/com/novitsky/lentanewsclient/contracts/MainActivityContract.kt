@@ -13,5 +13,6 @@ interface MainActivityContract {
     interface Presenter {
         fun onCreateActivity()
         fun onClickBackButton()
+        fun onBackStackChanged(size: Int)
     }
 }
