@@ -85,10 +85,6 @@ class CatalogListFragment: ActionBarFragment,
     }
 
     override fun onBackStackChanged() {
-        val manager = activity?.supportFragmentManager
-
-        if (manager?.fragments?.last() == this) {
-            updateTitle(getString(R.string.app_name))
-        }
+        updateTitle(getString(R.string.app_name))
     }
 }

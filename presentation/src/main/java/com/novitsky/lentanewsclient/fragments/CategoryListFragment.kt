@@ -21,7 +21,6 @@ class CategoryListFragment: ActionBarFragment,
     private lateinit var progressBar: ProgressBar
     private lateinit var presenter: CategoryListContract.Presenter
     private lateinit var adapter: CategoryListAdapter
-    private var title: String? = null
 
     constructor(): super()
 
@@ -57,9 +56,6 @@ class CategoryListFragment: ActionBarFragment,
     override fun updateData(newsList: MutableList<News>?) {
         adapter.updateData(newsList)
         progressBar.visibility = ProgressBar.INVISIBLE
-
-        title = newsList?.get(0)?.category
-        updateTitle(title.toString())
     }
 
     override fun showError(message: String) {
@@ -77,9 +73,7 @@ class CategoryListFragment: ActionBarFragment,
         val manager = activity?.supportFragmentManager
 
         if (manager?.fragments?.last() == this) {
-            if (title != null) {
-                updateTitle(title!!)
-            }
+            presenter.onFragmentLastInBackStack()
         }
     }
 }
