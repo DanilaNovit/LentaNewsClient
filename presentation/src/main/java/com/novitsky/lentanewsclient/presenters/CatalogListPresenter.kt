@@ -1,19 +1,19 @@
 package com.novitsky.lentanewsclient.presenters
 
 import android.annotation.SuppressLint
-import com.novitsky.data.repositories.LentaNetworkRepositoryImpl
+import com.novitsky.data.mappers.NewsMapper
 import com.novitsky.domain.model.News
 import com.novitsky.domain.model.NewsCategory
-import com.novitsky.domain.useсases.LentaRepositoryUseCase
-import com.novitsky.domain.useсases.LentaRepositoryUseCaseImpl
+import com.novitsky.domain.useсases.GetCatalogUseCase
 import com.novitsky.lentanewsclient.contracts.CatalogListContract
 import com.novitsky.lentanewsclient.navigation.Router
 import java.lang.ref.WeakReference
 
-class CatalogListPresenter (private var router: Router): CatalogListContract.Presenter {
+class CatalogListPresenter (
+        private var router: Router,
+        private val useCase: GetCatalogUseCase
+): CatalogListContract.Presenter {
     private lateinit var view: WeakReference<CatalogListContract.View>
-    private val useCase: LentaRepositoryUseCase =
-            LentaRepositoryUseCaseImpl(LentaNetworkRepositoryImpl())
 
     fun setView(view: CatalogListContract.View) {
         this.view = WeakReference(view)
@@ -21,20 +21,33 @@ class CatalogListPresenter (private var router: Router): CatalogListContract.Pre
 
 
     override fun onViewCreated() {
-        useCase.getCatalog(catalogCallback)
+        useCase.get(callback)
     }
 
-    override fun onCategoryItemClicked(category: NewsCategory) {
-        router.showCategory(category)
+    override fun onCategoryItemClicked(categoryID: Int) {
+        router.showCategory(categoryID)
     }
 
     override fun onNewsItemClicked(item: News) {
-        router.showDetail(item.guid)
+        router.showNewsDetail(item.ID)
     }
 
-    private val catalogCallback = object: LentaRepositoryUseCase.CallbackCatalog {
-        override fun onResponse(catalog: MutableMap<NewsCategory, MutableList<News>>) {
-            view.get()?.updateData(catalog)
+    private val callback = object: GetCatalogUseCase.Callback {
+        override fun onResponse(catalog: MutableMap<Int, MutableList<News>>) {
+            val items = mutableListOf<Any>()
+            val mapper = NewsMapper()
+
+            loop@ for (category in NewsCategory.values()) {
+                val categoryList = catalog[mapper.getIdByCategoryNews(category)] ?: continue
+
+                items.add(categoryList[0].category)
+
+                for (i in 0..3) {
+                    items.add(categoryList[i])
+                }
+            }
+
+            view.get()?.updateData(items)
         }
 
         @SuppressLint("ShowToast")

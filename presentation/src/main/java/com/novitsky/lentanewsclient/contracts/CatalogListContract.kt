@@ -1,17 +1,16 @@
 package com.novitsky.lentanewsclient.contracts
 
 import com.novitsky.domain.model.News
-import com.novitsky.domain.model.NewsCategory
 
 interface CatalogListContract {
     interface View {
-        fun updateData(catalogMap: MutableMap<NewsCategory, MutableList<News>>)
+        fun updateData(items: MutableList<Any>)
         fun showError(message: String)
     }
 
     interface Presenter {
         fun onViewCreated()
-        fun onCategoryItemClicked(category: NewsCategory)
+        fun onCategoryItemClicked(categoryID: Int)
         fun onNewsItemClicked(item: News)
     }
 }

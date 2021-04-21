@@ -1,5 +1,6 @@
 package com.novitsky.data.repositories
 
+import com.novitsky.data.mappers.NewsMapper
 import com.novitsky.data.parsers.NewsRSSParser
 import com.novitsky.domain.model.News
 import com.novitsky.domain.model.NewsCategory
@@ -11,12 +12,15 @@ import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 class LentaNetworkRepositoryImpl : LentaNetworkRepository {
+    private var newsContainer = mutableMapOf<Int, MutableList<News>>()
+    private val baseURL = "https://lenta.ru/"
+
     private val service: LentaService
     private var uploadedCategories = 0
 
     init {
         val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseURL)
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
 
@@ -40,21 +44,24 @@ class LentaNetworkRepositoryImpl : LentaNetworkRepository {
     }
 
     private fun updateCategory(category: NewsCategory, callback: LentaNetworkRepository.Callback) {
-        service.getNewsRSS(getCategoryUrlKey(category)).enqueue(object : Callback<String> {
+        service.getNewsRSS(NewsMapper().getUrlKeyByCategoryNews(category)).enqueue(
+                object : Callback<String> {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 callback.onResponse(newsContainer, -1)
             }
 
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful) {
-                    if (newsContainer[category] == null) {
-                        newsContainer[category] = mutableListOf()
+                    val categoryID = NewsMapper().getIdByCategoryNews(category)
+
+                    if (newsContainer[categoryID] == null) {
+                        newsContainer[categoryID] = mutableListOf()
                     }
 
-                    NewsRSSParser().parse(response.body(), newsContainer[category]!!)
+                    NewsRSSParser().parse(response.body(), newsContainer[categoryID]!!)
                     ++uploadedCategories
 
-                    if (uploadedCategories == NewsCategory.values().size - 1) {
+                    if (uploadedCategories == NewsCategory.values().size) {
                         getNews(callback)
                     }
                 } else {
@@ -62,27 +69,5 @@ class LentaNetworkRepositoryImpl : LentaNetworkRepository {
                 }
             }
         })
-    }
-
-    private fun getCategoryUrlKey(category: NewsCategory): String {
-        return when(category) {
-            NewsCategory.RUSSIA -> "russia"
-            NewsCategory.WORLD -> "world"
-            NewsCategory.USSR -> "ussr"
-            NewsCategory.ECONOMICS -> "economics"
-            NewsCategory.SCIENCE -> "science"
-            NewsCategory.CULTURE -> "culture"
-            NewsCategory.SPORT -> "sport"
-            NewsCategory.MEDIA -> "media"
-            NewsCategory.STYLE -> "style"
-            NewsCategory.TRAVEL -> "travel"
-            NewsCategory.LIFE -> "life"
-            NewsCategory.REALTY -> "realty"
-        }
-    }
-
-    companion object {
-        private const val BASE_URL = "https://lenta.ru/"
-        private var newsContainer = mutableMapOf<NewsCategory, MutableList<News>>()
     }
 }

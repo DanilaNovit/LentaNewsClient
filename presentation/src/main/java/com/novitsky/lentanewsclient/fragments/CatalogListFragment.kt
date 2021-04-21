@@ -10,22 +10,19 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.novitsky.domain.model.News
-import com.novitsky.domain.model.NewsCategory
 import com.novitsky.lentanewsclient.R
 import com.novitsky.lentanewsclient.adapters.CatalogListAdapter
 import com.novitsky.lentanewsclient.contracts.CatalogListContract
 import com.novitsky.lentanewsclient.viewholders.CatalogViewHolderFactory
 
-class CatalogListFragment: ActionBarFragment,
+class CatalogListFragment : ActionBarFragment(),
         CatalogListContract.View, FragmentManager.OnBackStackChangedListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var presenter: CatalogListContract.Presenter
     private lateinit var adapter: CatalogListAdapter
 
-    constructor(): super()
-
-    constructor(presenter: CatalogListContract.Presenter, adapter: CatalogListAdapter) {
+    fun setArguments(presenter: CatalogListContract.Presenter, adapter: CatalogListAdapter) {
         this.presenter = presenter
         this.adapter = adapter
     }
@@ -53,7 +50,7 @@ class CatalogListFragment: ActionBarFragment,
 
         adapter.setListener(catalogListener)
         recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = adapter.self()
+        recyclerView.adapter = adapter
         progressBar.visibility = ProgressBar.VISIBLE
 
         return view
@@ -65,8 +62,8 @@ class CatalogListFragment: ActionBarFragment,
     }
 
     private val catalogListener = object: CatalogViewHolderFactory.OnItemCatalogClickListener {
-        override fun onClickCategory(category: NewsCategory) {
-            presenter.onCategoryItemClicked(category)
+        override fun onClickCategory(categoryID: Int) {
+            presenter.onCategoryItemClicked(categoryID)
         }
 
         override fun onClickNews(item: News) {
@@ -74,8 +71,8 @@ class CatalogListFragment: ActionBarFragment,
         }
     }
 
-    override fun updateData(catalogMap: MutableMap<NewsCategory, MutableList<News>>) {
-        adapter.updateData(catalogMap)
+    override fun updateData(items: MutableList<Any>) {
+        adapter.updateData(items)
         progressBar.visibility = ProgressBar.INVISIBLE
     }
 

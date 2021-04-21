@@ -2,7 +2,6 @@ package com.novitsky.lentanewsclient.navigation
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.novitsky.domain.model.NewsCategory
 import com.novitsky.lentanewsclient.fragments.FragmentFactory
 import com.novitsky.lentanewsclient.fragments.FragmentFactoryImpl
 
@@ -16,12 +15,12 @@ class RouterImpl(
         add(fragmentFactory.createCatalog(this))
     }
 
-    override fun showCategory(category: NewsCategory) {
-        add(fragmentFactory.createCategory(this, category))
+    override fun showCategory(categoryID: Int) {
+        add(fragmentFactory.createCategory(this, categoryID))
     }
 
-    override fun showDetail(url: String) {
-        add(fragmentFactory.createDetailNews(url))
+    override fun showNewsDetail(id: String) {
+        add(fragmentFactory.createDetailNews(id))
     }
 
     override fun back() {

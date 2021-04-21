@@ -13,7 +13,6 @@ class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun onClick(item: News)
     }
 
-    lateinit var news: News
     val newsLayout: LinearLayout = itemView.findViewById(R.id.category_list_item)
     val titleView: TextView = itemView.findViewById(R.id.title_news_category_list)
     val imageView: UrlImageView = itemView.findViewById(R.id.image_news_category_list)

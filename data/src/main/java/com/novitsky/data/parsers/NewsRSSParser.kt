@@ -1,6 +1,8 @@
 package com.novitsky.data.parsers
 
+import com.novitsky.data.mappers.NewsMapper
 import com.novitsky.domain.model.News
+import com.novitsky.domain.model.NewsCategoryModel
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.StringReader
@@ -28,6 +30,8 @@ class NewsRSSParser {
         var tmpTitle = ""
         var tmpDescription = ""
         var tmpImageURL = ""
+        val mapper = NewsMapper()
+        var categoryModel: NewsCategoryModel? = null
 
         while (xpp.eventType != XmlPullParser.END_DOCUMENT
                 && itemCount <= resultLength) {
@@ -54,15 +58,20 @@ class NewsRSSParser {
                     "description" -> tmpDescription = xpp.text
                     "enclosure" -> tmpImageURL = xpp.getAttributeValue(0)
                     "category" -> {
+                        if (categoryModel == null) {
+                            categoryModel = mapper.getCategoryModelByTitle(xpp.text)
+                        }
+
                         if (itemCount < container.size) {
-                            container[itemCount - 1].guid = tmpGuid
+                            container[itemCount - 1].ID = tmpGuid
+                            container[itemCount - 1].detailsUrl = tmpGuid
                             container[itemCount - 1].title = tmpTitle
                             container[itemCount - 1].description = tmpDescription
                             container[itemCount - 1].imageURL = tmpImageURL
-                            container[itemCount - 1].category = xpp.text
+                            container[itemCount - 1].category = categoryModel
                         } else {
-                            container.add(News(tmpGuid, tmpTitle,
-                                    tmpDescription, tmpImageURL, xpp.text))
+                            container.add(News(tmpGuid, tmpGuid,tmpTitle, tmpDescription,
+                                    tmpImageURL, categoryModel))
                         }
                     }
                 }

@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
 abstract class ActionBarFragment: Fragment() {
-    fun updateTitle(title: String) {
+    open fun updateTitle(title: String) {
         (activity as AppCompatActivity).supportActionBar?.title = title
     }
 }

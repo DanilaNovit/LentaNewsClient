@@ -1,17 +1,18 @@
 package com.novitsky.lentanewsclient.viewholders
 
+import androidx.recyclerview.widget.RecyclerView
 import com.novitsky.domain.model.News
 
 class CategoryViewHolderBinder {
-    fun bind(viewHolder: CategoryViewHolder, news: News,
+    fun bind(viewHolder: RecyclerView.ViewHolder, news: News,
              listener: CategoryViewHolder.OnCategoryClickListener) {
-        viewHolder.news = news
+        if (viewHolder !is CategoryViewHolder) { return }
         viewHolder.titleView.text = news.title
         viewHolder.descriptionView.text = news.description
         viewHolder.imageView.uploadImage(news.imageURL)
 
         viewHolder.newsLayout.setOnClickListener {
-            listener.onClick(viewHolder.news)
+            listener.onClick(news)
         }
     }
 }

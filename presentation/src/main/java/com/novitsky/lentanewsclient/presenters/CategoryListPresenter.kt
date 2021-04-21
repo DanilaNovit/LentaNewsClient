@@ -1,21 +1,17 @@
 package com.novitsky.lentanewsclient.presenters
 
-import com.novitsky.data.repositories.LentaNetworkRepositoryImpl
 import com.novitsky.domain.model.News
-import com.novitsky.domain.model.NewsCategory
-import com.novitsky.domain.useсases.LentaRepositoryUseCase
-import com.novitsky.domain.useсases.LentaRepositoryUseCaseImpl
+import com.novitsky.domain.useсases.GetCategoryUseCase
 import com.novitsky.lentanewsclient.contracts.CategoryListContract
 import com.novitsky.lentanewsclient.navigation.Router
 import java.lang.ref.WeakReference
 
 class CategoryListPresenter(
-        private val category: NewsCategory,
-        private val router: Router
+        private val categoryID: Int,
+        private val router: Router,
+        private val useCase: GetCategoryUseCase
 ): CategoryListContract.Presenter {
     private lateinit var view: WeakReference<CategoryListContract.View>
-    private val useCase: LentaRepositoryUseCase =
-            LentaRepositoryUseCaseImpl(LentaNetworkRepositoryImpl())
     private var title: String? = null
 
     fun setView(view: CategoryListContract.View) {
@@ -23,24 +19,11 @@ class CategoryListPresenter(
     }
 
     override fun onViewCreated() {
-        when(category) {
-            NewsCategory.RUSSIA -> useCase.getRussianCategory(categoryCallback)
-            NewsCategory.WORLD -> useCase.getWorldCategory(categoryCallback)
-            NewsCategory.USSR -> useCase.getUssrCategory(categoryCallback)
-            NewsCategory.ECONOMICS -> useCase.getEconomicsCategory(categoryCallback)
-            NewsCategory.SCIENCE -> useCase.getScienceCategory(categoryCallback)
-            NewsCategory.CULTURE -> useCase.getCultureCategory(categoryCallback)
-            NewsCategory.SPORT -> useCase.getSportCategory(categoryCallback)
-            NewsCategory.MEDIA -> useCase.getMediaCategory(categoryCallback)
-            NewsCategory.STYLE -> useCase.getStyleCategory(categoryCallback)
-            NewsCategory.TRAVEL -> useCase.getTravelCategory(categoryCallback)
-            NewsCategory.LIFE -> useCase.getLifeCategory(categoryCallback)
-            NewsCategory.REALTY -> useCase.getRealtyCategory(categoryCallback)
-        }
+        useCase.get(categoryID, callback)
     }
 
     override fun onClickItemNews(item: News) {
-        router.showDetail(item.guid)
+        router.showNewsDetail(item.ID)
     }
 
     override fun onFragmentLastInBackStack() {
@@ -49,11 +32,11 @@ class CategoryListPresenter(
         }
     }
 
-    private val categoryCallback = object: LentaRepositoryUseCase.CallbackCategory {
-        override fun onResponse(news: MutableList<News>, category: NewsCategory) {
+    private val callback = object: GetCategoryUseCase.Callback {
+        override fun onResponse(news: MutableList<News>) {
                 view.get()?.updateData(news)
 
-                title = news[0].category
+                title = news[0].category.name
                 view.get()?.updateTitle(title.toString())
             }
 

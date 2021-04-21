@@ -7,14 +7,13 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.novitsky.domain.model.News
-import com.novitsky.domain.model.NewsCategory
 import com.novitsky.lentanewsclient.R
 import com.novitsky.lentanewsclient.customview.UrlImageView
 import java.lang.IllegalArgumentException
 
 class CatalogViewHolderFactory {
     interface OnItemCatalogClickListener {
-        fun onClickCategory(category: NewsCategory)
+        fun onClickCategory(categoryID: Int)
         fun onClickNews(item: News)
     }
 
@@ -22,7 +21,6 @@ class CatalogViewHolderFactory {
         itemView: View,
         val listener: OnItemCatalogClickListener
     ): RecyclerView.ViewHolder(itemView) {
-        lateinit var category: NewsCategory
         val categoryTitle: TextView = itemView.findViewById(R.id.category_title)
         val viewButton: TextView = itemView.findViewById(R.id.view_button)
     }
@@ -31,7 +29,6 @@ class CatalogViewHolderFactory {
         itemView: View,
         val listener: OnItemCatalogClickListener
     ): RecyclerView.ViewHolder(itemView) {
-        lateinit var news: News
         val newsLayout: LinearLayout = itemView.findViewById(R.id.layout_news)
         val imageNews: UrlImageView = itemView.findViewById(R.id.image_news)
         val titleNews: TextView = itemView.findViewById(R.id.title_news)

@@ -1,9 +1,10 @@
 package com.novitsky.domain.model
 
 data class News(
-    var guid: String,
+    var ID: String,
+    var detailsUrl: String,
     var title: String,
     var description: String,
     var imageURL: String,
-    var category: String
+    var category: NewsCategoryModel
 )

@@ -15,16 +15,15 @@ import com.novitsky.lentanewsclient.adapters.CategoryListAdapter
 import com.novitsky.lentanewsclient.contracts.CategoryListContract
 import com.novitsky.lentanewsclient.viewholders.CategoryViewHolder
 
-class CategoryListFragment: ActionBarFragment,
-        CategoryListContract.View, FragmentManager.OnBackStackChangedListener {
+class CategoryListFragment : ActionBarFragment(),
+        CategoryListContract.View, FragmentManager.OnBackStackChangedListener,
+        CategoryViewHolder.OnCategoryClickListener{
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var presenter: CategoryListContract.Presenter
     private lateinit var adapter: CategoryListAdapter
 
-    constructor(): super()
-
-    constructor(presenter: CategoryListContract.Presenter, adapter: CategoryListAdapter) {
+    fun setArguments(presenter: CategoryListContract.Presenter, adapter: CategoryListAdapter) {
         this.presenter = presenter
         this.adapter = adapter
     }
@@ -40,9 +39,9 @@ class CategoryListFragment: ActionBarFragment,
         recyclerView = view.findViewById(R.id.category_list)
         progressBar  = view.findViewById(R.id.category_progress_bar)
 
-        adapter.setListener(categoryListener)
+        adapter.setListener(this)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = adapter.self()
+        recyclerView.adapter = adapter
         progressBar.visibility = ProgressBar.VISIBLE
 
         return view
@@ -63,17 +62,15 @@ class CategoryListFragment: ActionBarFragment,
         toast.show()
     }
 
-    private val categoryListener = object: CategoryViewHolder.OnCategoryClickListener {
-        override fun onClick(item: News) {
-            presenter.onClickItemNews(item)
-        }
-    }
-
     override fun onBackStackChanged() {
         val manager = activity?.supportFragmentManager
 
         if (manager?.fragments?.last() == this) {
             presenter.onFragmentLastInBackStack()
         }
+    }
+
+    override fun onClick(item: News) {
+        presenter.onClickItemNews(item)
     }
 }
